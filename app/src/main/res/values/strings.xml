@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">YoYo悬浮时钟</string>
+    <string name="float_start">Start</string>
+    <string name="s1">开启悬浮时钟</string>
+    <string name="e1">关闭悬浮时钟</string>
+
+</resources>

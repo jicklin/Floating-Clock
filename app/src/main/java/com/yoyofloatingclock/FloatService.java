@@ -142,8 +142,20 @@ public class FloatService extends Service {
     private class FloatingOnTouchListener implements View.OnTouchListener {
 
         private int x;
-
         private int y;
+        private long touchDownTime;
+        private static final int CLICK_THRESHOLD = 200; // 200ms内算点击
+        private static final int MOVE_THRESHOLD = 10; // 移动小于10px算点击
+
+        private boolean isControlsVisible = false;
+        private View controlFrame;
+        private View resizeHandle;
+        private View closeButton;
+        
+        private boolean isDraggingResize = false;
+        private float initialDistance = 0;
+        private float currentScale = 1.0f;
+        private float baseTextSize = 24f;
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -151,9 +163,9 @@ public class FloatService extends Service {
                 case MotionEvent.ACTION_DOWN:
                     x = (int) event.getRawX();
                     y = (int) event.getRawY();
-                    System.out.println("x" + x + "y" + y);
-
+                    touchDownTime = System.currentTimeMillis();
                     break;
+                    
                 case MotionEvent.ACTION_MOVE:
                     int nowX = (int) event.getRawX();
                     int nowY = (int) event.getRawY();
@@ -163,18 +175,195 @@ public class FloatService extends Service {
                     x = nowX;
                     y = nowY;
 
-
                     layoutParams.x = layoutParams.x + movedX;
                     layoutParams.y = layoutParams.y + movedY;
 
-                    windowManager.updateViewLayout(v, layoutParams);
+                    // 根据控制框是否可见，更新不同的视图
+                    if (isControlsVisible && controlFrame != null) {
+                        windowManager.updateViewLayout(controlFrame, layoutParams);
+                    } else {
+                        windowManager.updateViewLayout(v, layoutParams);
+                    }
+                    break;
+                    
+                case MotionEvent.ACTION_UP:
+                    long touchDuration = System.currentTimeMillis() - touchDownTime;
+                    int deltaX = Math.abs((int)event.getRawX() - x);
+                    int deltaY = Math.abs((int)event.getRawY() - y);
+                    int totalMoved = deltaX + deltaY;
+                    
+                    // 判断是否为点击（时间短且移动距离小）
+                    if (touchDuration < CLICK_THRESHOLD && totalMoved < MOVE_THRESHOLD) {
+                        toggleControls();
+                    }
                     break;
 
                 default:
                     break;
-
             }
-            return false;
+            return true;
+        }
+        
+        private void toggleControls() {
+            if (isControlsVisible) {
+                hideControls();
+            } else {
+                showControls();
+            }
+        }
+        
+        private void showControls() {
+            if (controlFrame != null) return;
+            
+            isControlsVisible = true;
+            
+            // 创建控制框容器
+            android.widget.FrameLayout frameLayout = new android.widget.FrameLayout(getApplicationContext());
+            controlFrame = frameLayout;
+            
+            // 从 WindowManager 移除时钟，添加到框架中
+            try {
+                windowManager.removeView(mTextClock);
+            } catch (Exception e) {
+                // 如果已经被移除，忽略错误
+            }
+            
+            // 添加时钟视图到框架中
+            android.widget.FrameLayout.LayoutParams clockParams = new android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+            );
+            clockParams.gravity = android.view.Gravity.CENTER;
+            frameLayout.addView(mTextClock, clockParams);
+            
+            // 设置边框
+            GradientDrawable border = new GradientDrawable();
+            border.setCornerRadius(32);
+            border.setStroke(3, Color.parseColor("#00FF00"));
+            border.setColor(Color.TRANSPARENT);
+            frameLayout.setForeground(border);
+            
+            // 创建缩放手柄（左下角）
+            resizeHandle = new View(getApplicationContext());
+            android.widget.FrameLayout.LayoutParams handleParams = new android.widget.FrameLayout.LayoutParams(40, 40);
+            handleParams.gravity = android.view.Gravity.BOTTOM | android.view.Gravity.START;
+            resizeHandle.setLayoutParams(handleParams);
+            GradientDrawable handleBg = new GradientDrawable();
+            handleBg.setShape(GradientDrawable.OVAL);
+            handleBg.setColor(Color.parseColor("#00FF00"));
+            resizeHandle.setBackground(handleBg);
+            resizeHandle.setOnTouchListener(new ResizeHandleTouchListener());
+            frameLayout.addView(resizeHandle);
+            
+            // 创建关闭按钮（右上角）
+            closeButton = new android.widget.TextView(getApplicationContext());
+            android.widget.FrameLayout.LayoutParams closeParams = new android.widget.FrameLayout.LayoutParams(40, 40);
+            closeParams.gravity = android.view.Gravity.TOP | android.view.Gravity.END;
+            closeButton.setLayoutParams(closeParams);
+            ((android.widget.TextView)closeButton).setText("×");
+            ((android.widget.TextView)closeButton).setTextSize(20);
+            ((android.widget.TextView)closeButton).setTextColor(Color.WHITE);
+            ((android.widget.TextView)closeButton).setGravity(android.view.Gravity.CENTER);
+            GradientDrawable closeBg = new GradientDrawable();
+            closeBg.setShape(GradientDrawable.OVAL);
+            closeBg.setColor(Color.parseColor("#FF0000"));
+            closeButton.setBackground(closeBg);
+            closeButton.setOnClickListener(v -> {
+                stopSelf();
+            });
+            frameLayout.addView(closeButton);
+            
+            // 添加控制框到窗口
+            windowManager.addView(frameLayout, layoutParams);
+            
+            // 设置触摸监听器到控制框
+            frameLayout.setOnTouchListener(this);
+        }
+        
+        private void hideControls() {
+            if (controlFrame == null) return;
+            
+            isControlsVisible = false;
+            
+            // 从控制框中移除时钟视图
+            ((android.view.ViewGroup)controlFrame).removeView(mTextClock);
+            
+            // 移除控制框
+            try {
+                windowManager.removeView(controlFrame);
+            } catch (Exception e) {
+                // 忽略错误
+            }
+            
+            // 恢复原始时钟视图到窗口
+            windowManager.addView(mTextClock, layoutParams);
+            
+            // 恢复触摸监听器
+            mTextClock.setOnTouchListener(this);
+            
+            controlFrame = null;
+            resizeHandle = null;
+            closeButton = null;
+        }
+        
+        private class ResizeHandleTouchListener implements View.OnTouchListener {
+            private int startX, startY;
+            private float startScale;
+            private int startWidth, startHeight;
+            
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = (int) event.getRawX();
+                        startY = (int) event.getRawY();
+                        startScale = currentScale;
+                        
+                        // 记录初始尺寸
+                        startWidth = controlFrame.getWidth();
+                        startHeight = controlFrame.getHeight();
+                        return true;
+                        
+                    case MotionEvent.ACTION_MOVE:
+                        int currentX = (int) event.getRawX();
+                        int currentY = (int) event.getRawY();
+                        
+                        // 计算拖动距离（向左下为正，向右上为负）
+                        int deltaX = currentX - startX;
+                        int deltaY = currentY - startY;
+                        
+                        // 使用对角线距离计算缩放比例
+                        // 向左下拖动（deltaX < 0, deltaY > 0）= 放大
+                        // 向右上拖动（deltaX > 0, deltaY < 0）= 缩小
+                        float diagonalDelta = (float) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+                        
+                        // 判断方向：左下为正（放大），右上为负（缩小）
+                        boolean isEnlarging = (deltaX < 0 && deltaY > 0) || 
+                                            (deltaX < 0 && Math.abs(deltaX) > Math.abs(deltaY)) ||
+                                            (deltaY > 0 && Math.abs(deltaY) > Math.abs(deltaX));
+                        
+                        float scaleDelta = diagonalDelta / 300f; // 调整灵敏度
+                        if (!isEnlarging) {
+                            scaleDelta = -scaleDelta;
+                        }
+                        
+                        currentScale = startScale + scaleDelta;
+                        currentScale = Math.max(0.5f, Math.min(currentScale, 3.0f));
+                        
+                        // 更新文字大小
+                        mTextClock.setTextSize(baseTextSize * currentScale);
+                        
+                        // 实时更新窗口布局以反映大小变化
+                        // 强制重新测量和布局
+                        controlFrame.requestLayout();
+                        
+                        return true;
+                        
+                    case MotionEvent.ACTION_UP:
+                        return true;
+                }
+                return false;
+            }
         }
     }
 }

@@ -1,118 +1,305 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:background="@color/black">
 
-    <!-- 相机预览 -->
-    <androidx.camera.view.PreviewView
-        android:id="@+id/preview_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- 扫描框指示器 -->
-    <View
-        android:id="@+id/scan_frame"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:background="@android:color/transparent"
-        android:foreground="@drawable/scan_frame_border"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <!-- 提示文字 -->
-    <TextView
-        android:id="@+id/tv_scan_hint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="@string/qr_scan_hint"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:background="#80000000"
-        android:padding="12dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scan_frame" />
-
-    <!-- 结果显示区域 -->
+    <!-- Top Navigation with Tabs -->
     <LinearLayout
-        android:id="@+id/result_container"
-        android:layout_width="0dp"
+        android:id="@+id/top_nav"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#E0FFFFFF"
-        android:padding="16dp"
-        android:visibility="gone"
-        android:layout_margin="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:background="#202020"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_result_label"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@android:drawable/ic_menu_close_clear_cancel"
+                app:tint="@color/white" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tab_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                app:tabTextColor="#80FFFFFF"
+                app:tabSelectedTextColor="@color/white"
+                app:tabIndicatorColor="@color/white">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_scan" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tab_generate" />
+            </com.google.android.material.tabs.TabLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Scan Mode UI -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_scan_mode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/top_nav"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/viewFinder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Overlay for scan frame -->
+        <View
+            android:id="@+id/scan_overlay"
+            android:layout_width="280dp"
+            android:layout_height="280dp"
+            android:background="@drawable/scan_frame_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4" />
+
+        <Button
+            android:id="@+id/btn_select_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/qr_scan_result"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="#000000" />
+            android:layout_marginTop="16dp"
+            android:text="@string/btn_select_image"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:textColor="@color/white"
+            app:strokeColor="@color/white"
+            app:icon="@android:drawable/ic_menu_gallery"
+            app:iconTint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_nav"
+            app:layout_constraintBottom_toTopOf="@id/scan_overlay" />
 
         <TextView
-            android:id="@+id/tv_result_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/qr_scan_hint"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scan_overlay" />
+
+        <!-- Result Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="16sp"
-            android:textColor="#000000"
-            android:textIsSelectable="true" />
+            android:layout_margin="16dp"
+            android:visibility="gone"
+            app:cardBackgroundColor="#303030"
+            app:cardCornerRadius="12dp"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/tv_scan_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    tools:text="扫描结果：https://www.example.com" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_copy"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/btn_copy_result" />
+
+                    <Button
+                        android:id="@+id/btn_scan_again"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/btn_scan_again"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:textColor="@color/white"
+                        app:strokeColor="@color/white" />
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Generate Mode UI -->
+    <ScrollView
+        android:id="@+id/layout_generate_mode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        android:background="#121212"
+        app:layout_constraintTop_toBottomOf="@id/top_nav"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            android:gravity="end">
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_input_content"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                app:boxStrokeColor="@color/white"
+                app:hintTextColor="@color/white"
+                android:textColorHint="#80FFFFFF">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_qr_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:inputType="textMultiLine"
+                    android:minLines="3"
+                    android:gravity="top|start" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btn_copy_result"
+                android:id="@+id/btn_generate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/btn_generate"
+                android:padding="12dp" />
+
+            <!-- URL Smart Edit Section -->
+            <Button
+                android:id="@+id/btn_parse_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/qr_copy_result"
-                android:layout_marginEnd="8dp"
-                style="@style/Widget.Material3.Button.TonalButton" />
+                android:layout_marginTop="8dp"
+                android:text="@string/btn_parse_url"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/layout_url_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="#303030"
+                android:padding="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_base_url"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp" />
+
+                <EditText
+                    android:id="@+id/et_base_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:inputType="textUri" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/label_params"
+                    android:textColor="#AAAAAA"
+                    android:textSize="12sp" />
+
+                <LinearLayout
+                    android:id="@+id/container_params"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+
+                <Button
+                    android:id="@+id/btn_add_param"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_add_param"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btn_update_url"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/btn_update_url" />
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_qr_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:visibility="gone"
+                app:cardCornerRadius="8dp"
+                app:cardBackgroundColor="@color/white">
+
+                <ImageView
+                    android:id="@+id/iv_qr_code"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
+                    android:padding="10dp"
+                    android:scaleType="fitCenter" />
+            </androidx.cardview.widget.CardView>
 
             <Button
-                android:id="@+id/btn_scan_again"
+                android:id="@+id/btn_save_qr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/qr_scan_again"
-                style="@style/Widget.Material3.Button" />
+                android:layout_marginTop="24dp"
+                android:visibility="gone"
+                android:text="@string/btn_save_qr"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:textColor="@color/white"
+                app:strokeColor="@color/white"
+                app:icon="@android:drawable/ic_menu_save"
+                app:iconTint="@color/white" />
 
         </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- 返回按钮 -->
-    <ImageButton
-        android:id="@+id/btn_back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_margin="16dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="返回"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"
-        app:tint="#FFFFFF"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

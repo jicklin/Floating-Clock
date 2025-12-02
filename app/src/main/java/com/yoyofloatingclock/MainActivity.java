@@ -1,13 +1,18 @@
 package com.yoyofloatingclock;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.provider.Settings;
 import android.view.View;
@@ -17,61 +22,97 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private ActivityResultLauncher<String> cameraPermissionLauncher;
+    private ActivityResultLauncher<Intent> overlayPermissionLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-//        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(R.layout.float_clock);
-        Button startBtn = (Button) findViewById(R.id.start_btn);
-        startBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "开始悬浮了", Snackbar.LENGTH_LONG).show();
-                checkOverlayPermission();
-            }
+        // 初始化权限请求启动器
+        initPermissionLaunchers();
+
+        // 悬浮时钟 - 开启按钮
+        Button startBtn = findViewById(R.id.btn_start_float);
+        startBtn.setOnClickListener(v -> {
+            checkOverlayPermission();
         });
 
-        Button endBtn = (Button) findViewById(R.id.end_btn);
-        endBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "关闭了", Snackbar.LENGTH_LONG).show();
-                MainActivity.this.stopService(new Intent(MainActivity.this, FloatService.class));
-
-            }
+        // 悬浮时钟 - 关闭按钮
+        Button stopBtn = findViewById(R.id.btn_stop_float);
+        stopBtn.setOnClickListener(v -> {
+            Toast.makeText(this, R.string.toast_float_stopped, Toast.LENGTH_SHORT).show();
+            stopService(new Intent(MainActivity.this, FloatService.class));
         });
 
-
+        // 二维码扫描按钮
+        Button scanQrBtn = findViewById(R.id.btn_scan_qr);
+        scanQrBtn.setOnClickListener(v -> {
+            checkCameraPermissionAndScan();
+        });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 0) {
-            if (!Settings.canDrawOverlays(this)) {
-                Toast.makeText(MainActivity.this, "授权失败",Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(MainActivity.this, "授权成功",Toast.LENGTH_LONG).show();
-            }
-        }
+    private void initPermissionLaunchers() {
+        // 相机权限请求启动器
+        cameraPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted) {
+                        openQRScanner();
+                    } else {
+                        Toast.makeText(this, R.string.toast_permission_camera, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
+
+        // 悬浮窗权限请求启动器
+        overlayPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (Settings.canDrawOverlays(this)) {
+                        Toast.makeText(this, R.string.toast_permission_granted, Toast.LENGTH_SHORT).show();
+                        startFloatService();
+                    } else {
+                        Toast.makeText(this, R.string.toast_permission_denied, Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
     }
 
     private void checkOverlayPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (!Settings.canDrawOverlays(this)) {
-                Toast.makeText(this, "请授权", Toast.LENGTH_LONG).show();
-                startActivityForResult(new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName())), 0);
-            }else {
-                Intent intent = new Intent(MainActivity.this, FloatService.class);
-                MainActivity.this.startService(intent);
+                Toast.makeText(this, R.string.toast_permission_overlay, Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                        Uri.parse("package:" + getPackageName()));
+                overlayPermissionLauncher.launch(intent);
+            } else {
+                startFloatService();
             }
-        }else {
-            MainActivity.this.startService(new Intent(MainActivity.this, FloatService.class));
-
+        } else {
+            startFloatService();
         }
+    }
 
+    private void startFloatService() {
+        Toast.makeText(this, R.string.toast_float_started, Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(MainActivity.this, FloatService.class);
+        startService(intent);
+    }
+
+    private void checkCameraPermissionAndScan() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            openQRScanner();
+        } else {
+            cameraPermissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    private void openQRScanner() {
+        Intent intent = new Intent(this, QRScannerActivity.class);
+        startActivity(intent);
     }
 
 }

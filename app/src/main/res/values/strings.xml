@@ -4,4 +4,31 @@
     <string name="s1">开启悬浮时钟</string>
     <string name="e1">关闭悬浮时钟</string>
 
+    <!-- 悬浮时钟卡片 -->
+    <string name="card_float_clock_title">⏰ 悬浮时钟</string>
+    <string name="card_float_clock_desc">在屏幕上显示可拖动的时钟，精确到毫秒</string>
+    <string name="btn_start_float">开启悬浮时钟</string>
+    <string name="btn_stop_float">关闭悬浮时钟</string>
+
+    <!-- 二维码扫描卡片 -->
+    <string name="card_qr_scanner_title">📷 二维码扫描</string>
+    <string name="card_qr_scanner_desc">快速扫描二维码和条形码</string>
+    <string name="btn_scan_qr">扫描二维码</string>
+
+    <!-- 扫描界面 -->
+    <string name="qr_scanner_title">扫描二维码</string>
+    <string name="qr_scan_hint">将二维码放入框内</string>
+    <string name="qr_scan_result">扫描结果：</string>
+    <string name="qr_scan_again">再次扫描</string>
+    <string name="qr_copy_result">复制结果</string>
+
+    <!-- 提示信息 -->
+    <string name="toast_float_started">悬浮时钟已开启</string>
+    <string name="toast_float_stopped">悬浮时钟已关闭</string>
+    <string name="toast_permission_overlay">请授予悬浮窗权限</string>
+    <string name="toast_permission_camera">请授予相机权限</string>
+    <string name="toast_permission_granted">授权成功</string>
+    <string name="toast_permission_denied">授权失败</string>
+    <string name="toast_result_copied">已复制到剪贴板</string>
+
 </resources>

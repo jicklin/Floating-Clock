@@ -83,7 +83,7 @@ public class QRScannerActivity extends AppCompatActivity {
 
     private void initBarcodeScanner() {
         BarcodeScannerOptions options = new BarcodeScannerOptions.Builder()
-                .setBarcodeFormats(Barcode.FORMAT_QR_CODE, Barcode.FORMAT_ALL_FORMATS)
+                .setBarcodeFormats(Barcode.FORMAT_ALL_FORMATS)
                 .build();
         barcodeScanner = BarcodeScanning.getClient(options);
         cameraExecutor = Executors.newSingleThreadExecutor();

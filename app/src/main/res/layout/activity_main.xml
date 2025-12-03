@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:attr/colorBackground"
+    android:background="@color/color_background"
     android:fillViewport="true">
 
     <LinearLayout
@@ -19,6 +19,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/color_surface"
             app:contentPadding="16dp">
 
             <LinearLayout
@@ -33,7 +34,7 @@
                     android:text="@string/card_float_clock_title"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:textColor="@color/color_text_primary" />
 
                 <TextView
                     android:id="@+id/tv_float_clock_desc"
@@ -42,7 +43,7 @@
                     android:layout_marginTop="4dp"
                     android:text="@string/card_float_clock_desc"
                     android:textSize="14sp"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:textColor="@color/color_text_secondary" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -57,7 +58,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/btn_start_float"
                         android:layout_marginEnd="8dp"
-                        style="@style/Widget.Material3.Button.TonalButton" />
+                        style="@style/Widget.Material3.Button" />
 
                     <Button
                         android:id="@+id/btn_stop_float"
@@ -79,6 +80,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/color_surface"
             app:contentPadding="16dp">
 
             <LinearLayout
@@ -93,7 +95,7 @@
                     android:text="@string/card_qr_scanner_title"
                     android:textSize="20sp"
                     android:textStyle="bold"
-                    android:textColor="?android:attr/textColorPrimary" />
+                    android:textColor="@color/color_text_primary" />
 
                 <TextView
                     android:id="@+id/tv_qr_scanner_desc"
@@ -102,7 +104,7 @@
                     android:layout_marginTop="4dp"
                     android:text="@string/card_qr_scanner_desc"
                     android:textSize="14sp"
-                    android:textColor="?android:attr/textColorSecondary" />
+                    android:textColor="@color/color_text_secondary" />
 
                 <Button
                     android:id="@+id/btn_scan_qr"

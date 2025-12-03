@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/color_background">
 
     <!-- Top Navigation with Tabs -->
     <LinearLayout
@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#202020"
+        android:background="@color/color_surface"
         app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
@@ -27,7 +27,7 @@
                 android:layout_marginStart="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                app:tint="@color/white" />
+                app:tint="@color/color_text_primary" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout"
@@ -35,9 +35,9 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:background="@android:color/transparent"
-                app:tabTextColor="#80FFFFFF"
-                app:tabSelectedTextColor="@color/white"
-                app:tabIndicatorColor="@color/white">
+                app:tabTextColor="@color/color_text_secondary"
+                app:tabSelectedTextColor="@color/color_text_primary"
+                app:tabIndicatorColor="@color/color_text_primary">
 
                 <com.google.android.material.tabs.TabItem
                     android:layout_width="wrap_content"
@@ -111,7 +111,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:visibility="gone"
-            app:cardBackgroundColor="#303030"
+            app:cardBackgroundColor="@color/color_surface"
             app:cardCornerRadius="12dp"
             app:layout_constraintBottom_toBottomOf="parent">
 
@@ -125,7 +125,7 @@
                     android:id="@+id/tv_scan_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/color_text_primary"
                     android:textSize="16sp"
                     tools:text="扫描结果：https://www.example.com" />
 
@@ -151,8 +151,8 @@
                         android:layout_marginStart="8dp"
                         android:text="@string/btn_scan_again"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:textColor="@color/white"
-                        app:strokeColor="@color/white" />
+                        android:textColor="@color/color_text_primary"
+                        app:strokeColor="@color/color_text_primary" />
                 </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -164,7 +164,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
-        android:background="#121212"
+        android:background="@color/color_background"
         app:layout_constraintTop_toBottomOf="@id/top_nav"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -180,15 +180,15 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_input_content"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="@color/white"
-                app:hintTextColor="@color/white"
-                android:textColorHint="#80FFFFFF">
+                app:boxStrokeColor="@color/color_text_primary"
+                app:hintTextColor="@color/color_text_primary"
+                android:textColorHint="@color/color_text_secondary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_qr_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/color_text_primary"
                     android:inputType="textMultiLine"
                     android:minLines="3"
                     android:gravity="top|start" />
@@ -210,7 +210,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/btn_parse_url"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:textColor="@color/white"
+                android:textColor="?attr/colorPrimary"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -219,7 +219,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:background="#303030"
+                android:background="@color/color_surface"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp">
@@ -228,14 +228,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/label_base_url"
-                    android:textColor="#AAAAAA"
+                    android:textColor="@color/color_text_secondary"
                     android:textSize="12sp" />
 
                 <EditText
                     android:id="@+id/et_base_url"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
+                    android:textColor="@color/color_text_primary"
                     android:textSize="14sp"
                     android:inputType="textUri" />
 
@@ -244,7 +244,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="@string/label_params"
-                    android:textColor="#AAAAAA"
+                    android:textColor="@color/color_text_secondary"
                     android:textSize="12sp" />
 
                 <LinearLayout
@@ -259,7 +259,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/btn_add_param"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:textColor="@color/white" />
+                    android:textColor="?attr/colorPrimary" />
 
                 <Button
                     android:id="@+id/btn_update_url"
@@ -294,10 +294,10 @@
                 android:visibility="gone"
                 android:text="@string/btn_save_qr"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:textColor="@color/white"
-                app:strokeColor="@color/white"
+                android:textColor="@color/color_text_primary"
+                app:strokeColor="@color/color_text_primary"
                 app:icon="@android:drawable/ic_menu_save"
-                app:iconTint="@color/white" />
+                app:iconTint="@color/color_text_primary" />
 
         </LinearLayout>
     </ScrollView>

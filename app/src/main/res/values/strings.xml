@@ -59,4 +59,48 @@
     <string name="toast_permission_denied">授权失败</string>
     <string name="toast_result_copied">已复制到剪贴板</string>
 
+    <!-- 照片拼图卡片 -->
+    <string name="card_puzzle_title">🧩 照片拼图</string>
+    <string name="card_puzzle_desc">将多张照片拼接成一张图片</string>
+    <string name="btn_puzzle">照片拼图</string>
+    
+    <!-- 拼图界面 -->
+    <string name="puzzle_title">照片拼图</string>
+    <string name="btn_select_photos">选择照片</string>
+    <string name="btn_export">保存拼图</string>
+    <string name="btn_settings">设置</string>
+    <string name="layout_template">布局模板</string>
+    
+    <!-- 拼图设置 -->
+    <string name="settings_title">拼图设置</string>
+    <string name="setting_spacing">图片间距</string>
+    <string name="setting_border">边框宽度</string>
+    <string name="setting_background">背景颜色</string>
+    <string name="setting_border_color">边框颜色</string>
+    <string name="btn_confirm">确定</string>
+    <string name="btn_cancel">取消</string>
+    
+    <!-- 拼图提示 -->
+    <string name="toast_select_photos_first">请先选择照片</string>
+    <string name="toast_puzzle_saved">拼图已保存到相册</string>
+    <string name="toast_puzzle_save_failed">保存失败</string>
+    <string name="toast_max_photos">最多选择9张照片</string>
+    <string name="hint_select_photos">点击"选择照片"开始创作</string>
+    <string name="hint_drag_scale">拖动调整位置，双指缩放</string>
+    
+    <!-- 拼图设置 -->
+    <string name="setting_aspect_ratio">画布比例</string>
+    <string name="setting_image_format">图片格式</string>
+    
+    <!-- 拼图模式 -->
+    <string name="mode_grid">网格</string>
+    <string name="mode_stitch_h">横拼</string>
+    <string name="mode_stitch_v">竖拼</string>
+    <string name="hint_stitch_mode">拼接模式：无限张照片排成长图</string>
+    
+    <!-- 布局变体 -->
+    <string name="layout_variants">布局样式</string>
+    <string name="btn_custom_layout">自定义</string>
+    <string name="photos_count_format">%d张图片</string>
+
 </resources>

@@ -51,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         scanQrBtn.setOnClickListener(v -> {
             checkCameraPermissionAndScan();
         });
+
+        // 照片拼图按钮
+        Button puzzleBtn = findViewById(R.id.btn_puzzle);
+        puzzleBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(this, PuzzleActivityEnhanced.class);
+            startActivity(intent);
+        });
     }
 
     private void initPermissionLaunchers() {

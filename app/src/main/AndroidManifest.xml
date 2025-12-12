@@ -29,6 +29,21 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.FloatingClock" />
 
+        <activity
+            android:name=".PuzzleActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FloatingClock" />
+
+        <activity
+            android:name=".PuzzleActivityEnhanced"
+            android:exported="false"
+            android:theme="@style/Theme.FloatingClock" />
+
+        <activity
+            android:name=".LayoutEditorActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FloatingClock" />
+
         <service
         android:name=".FloatService"
         android:enabled="true"

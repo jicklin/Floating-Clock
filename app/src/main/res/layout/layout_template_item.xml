@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/template_card"
+    android:layout_width="100dp"
+    android:layout_height="120dp"
+    android:layout_marginEnd="12dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="2dp"
+    app:strokeColor="@android:color/transparent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="8dp">
+
+        <!-- 布局预览 -->
+        <com.yoyofloatingclock.LayoutPreviewView
+            android:id="@+id/layout_preview"
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
+
+        <!-- 布局名称 -->
+        <TextView
+            android:id="@+id/template_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="11sp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:textColor="@color/color_text_primary" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

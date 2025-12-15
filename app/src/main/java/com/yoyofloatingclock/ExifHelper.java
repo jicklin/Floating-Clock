@@ -190,7 +190,7 @@ public class ExifHelper {
         try {
             SimpleDateFormat exifFormat = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.US);
             Date date = exifFormat.parse(dateTime);
-            SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+            SimpleDateFormat displayFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());  // 只显示到分钟
             return displayFormat.format(date);
         } catch (Exception e) {
             return dateTime;
@@ -232,10 +232,10 @@ public class ExifHelper {
     private String getMeteringModeName(int mode) {
         switch (mode) {
             case ExifInterface.METERING_MODE_AVERAGE: return "平均测光";
-            case ExifInterface.METERING_MODE_CENTER_WEIGHTED_AVERAGE: return "中央重点测光";
+            case 2: return "中央重点测光";  // CENTER_WEIGHTED_AVERAGE
             case ExifInterface.METERING_MODE_SPOT: return "点测光";
             case ExifInterface.METERING_MODE_MULTI_SPOT: return "多点测光";
-            case ExifInterface.METERNG_MODE_PATTERN: return "评价测光";
+            case 5: return "评价测光";  // PATTERN
             default: return null;
         }
     }

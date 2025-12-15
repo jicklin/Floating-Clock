@@ -165,6 +165,50 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- 照片水印 -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_watermark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:cardBackgroundColor="@color/color_surface"
+            app:contentPadding="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📸 照片水印"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="自动提取照片信息（时间、位置、相机参数）添加水印"
+                    android:textSize="14sp"
+                    android:textColor="@color/color_text_secondary" />
+
+                <Button
+                    android:id="@+id/btn_watermark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="添加水印"
+                    style="@style/Widget.Material3.Button" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
     </LinearLayout>
 
 </ScrollView>

@@ -53,9 +53,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 照片拼图按钮
-        Button puzzleBtn = findViewById(R.id.btn_puzzle);
-        puzzleBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(this, PuzzleActivityEnhanced.class);
+        Button btnPuzzle = findViewById(R.id.btn_puzzle);
+        btnPuzzle.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, PuzzleActivityEnhanced.class);
+            startActivity(intent);
+        });
+
+        Button btnWatermark = findViewById(R.id.btn_watermark);
+        btnWatermark.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, WatermarkActivity.class);
             startActivity(intent);
         });
     }
